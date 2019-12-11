@@ -1,0 +1,144 @@
+.chat {
+  height: auto;
+  width: 345px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 10%;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.chat__wrap {
+  position: fixed;
+  bottom: 0;
+  left: 30px;
+}
+
+.chat__close {
+  position: absolute;
+  left: -27px;
+  cursor: pointer;
+}
+
+.chat__header {
+  background: #2b2b2b;
+  color: #ffffff;
+  height: 79px;
+  position: relative;
+}
+
+.chat__header:before {
+  content: "";
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background: #44bb6e;
+  width: 70px;
+  height: 70px;
+  right: -43px;
+  top: -25px;
+}
+
+.chat__header-text {
+  display: block;
+  font-size: 16px;
+}
+
+.chat__header-text:nth-child(2) {
+  margin-top: 5px;
+  font-size: 15px;
+  opacity: 0.5;
+}
+
+.chat__header-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.chat__header-wrap {
+  margin-left: 15px;
+}
+
+.chat__content {
+  overflow: auto;
+  height: 292px;
+  background: #ffffff;
+  box-sizing: border-box;
+  padding: 30px 12px 30px 24px;
+}
+
+.chat__footer {
+  background: #eef1f5;
+  min-height: 80px;
+}
+
+.chat__header, .chat__footer {
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.chat__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 18px 0;
+  border: 1px solid #299f53;
+  padding: 9px 90px 9px 11px;
+  height: 59px;
+  resize: none;
+  border-radius: 5px;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+}
+
+.chat__footer-wrap {
+  position: relative;
+}
+
+.chat__footer-btn {
+  background: transparent;
+  border: none;
+  position: absolute;
+  top: 25px;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out, fill 0.3s ease-in-out;
+}
+
+.chat__footer-btn:hover {
+  opacity: 1;
+  fill: #44bb6e;
+}
+
+.chat__footer-btn:nth-child(2) {
+  right: 50px;
+}
+.chat__footer-btn:nth-child(3) {
+  right: 20px;
+}
+
+.chat__message {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.chat__message-text {
+  flex: none;
+  background: #eef1f5;
+  width: 70%;
+  padding: 14px 15px 17px;
+  border-radius: 5px;
+  margin: 0;
+  font-size: 14px;
+}
+.chat__message-time {
+  opacity: 0.5;
+  font-size: 12px;
+}
+
+/* .chat__textarea::placeholder, .chat__textarea::-webkit-input-placeholder,
+.chat__textarea::-moz-placeholder, .chat__textarea:-moz-placeholder,
+.chat__textarea:-ms-input-placeholder {
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+} */

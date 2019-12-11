@@ -55,7 +55,7 @@ list.fetchGoods();
 document.addEventListener("DOMContentLoaded", () => {
     list.render();
 })
-
+// Класс для корзины
 class Cart {
     constructor() {
         this.cartItems = [];
@@ -77,12 +77,41 @@ class CartItem {
         this.price = price;
     }
     render() {
-        return `
-        <div>
-          <span class="cart__title">${this.title}</span>
-          <span class="cart__price">${this.price}</span>
-          <button class="cart__btn">Удалить</button>
-        </div>
-      `
+        return `<div class="cart__item">
+                    <span class="cart__title">${this.title}</span>
+                    <span class="cart__price">${this.price}</span>
+                    <button class="cart__btn">Удалить</button>
+                </div>`;
     }
 }
+
+// Класс для чата
+
+class Chat {
+    constructor() {
+        this.messages = [];
+    }
+}
+
+let arr = [];
+function chat() {
+    let hours = new Date().getHours()
+    let minutes = new Date().getMinutes()
+    for (let i = 0; i < arr.length; i++) {
+        document.querySelector(".chat__content")
+        .innerHTML += `<div class="chat__message">
+                            <span class="chat__message-time">${hours}:${minutes}</span>
+                            <p class="chat__message-text">${arr[i]}</p>
+                        </div>`;
+    }
+}
+
+document.querySelector(".chat__textarea")
+    .addEventListener("keyup", function (e) {
+        e.preventDefault();
+        if (e.keyCode === 13) {
+            arr.push(this.value);
+            this.value = "";
+            chat();
+        }
+    });
