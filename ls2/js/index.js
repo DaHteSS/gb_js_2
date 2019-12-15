@@ -94,24 +94,22 @@ class Chat {
 }
 
 let arr = [];
-function chat() {
+function chat(value) {
     let hours = new Date().getHours()
     let minutes = new Date().getMinutes()
-    for (let i = 0; i < arr.length; i++) {
-        document.querySelector(".chat__content")
-        .innerHTML += `<div class="chat__message">
-                            <span class="chat__message-time">${hours}:${minutes}</span>
-                            <p class="chat__message-text">${arr[i]}</p>
-                        </div>`;
-    }
+    document.querySelector(".chat__content")
+    .innerHTML += `<div class="chat__message">
+                        <span class="chat__message-time">${hours}:${minutes}</span>
+                        <p class="chat__message-text">${value}</p>
+                    </div>`;
 }
 
 document.querySelector(".chat__textarea")
     .addEventListener("keyup", function (e) {
         e.preventDefault();
-        if (e.keyCode === 13) {
-            arr.push(this.value);
+        if (e.keyCode === 13 && this.value.trim() !== "") {
+            chat(this.value);
             this.value = "";
-            chat();
+            document.querySelector(".chat__content").scrollTop = 9999;
         }
     });

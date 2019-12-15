@@ -1,67 +1,82 @@
 class Hamburger {
-  constructor(size, stuffing) {
-    this.size = size;
-    this.stuffing = stuffing;
+  constructor() {
+    this.hamburgerStuff = [];
+    this.sum = 0;
+    this.calories = 0;
   }
-  addTopping(arr, topping) {    // Добавить добавку
-    arr.push(topping);
+  initHamburgerEvent() {
+    let inputs = document.querySelectorAll("input");
+    for(let i = 0; i < inputs.length; i++) {
+      inputs[i].addEventListener("change", () => {
+        this.hamburgerStuff = [];
+        this.calculatePrice();
+        this.calculateCalories();
+      })
+    }
   }
-  removeTopping(arr, topping) { // Убрать добавку
-    let indexOfTopping = arr.indexOf(topping);
-    arr.splice(indexOfTopping, 1);
-  }
-  getToppings() {   // Получить список добавок
-    let topping = [];
-    const inputs = document.querySelectorAll(`.menu__input-topping`);
-    this.initChangeEventCheckbox(inputs, topping);
-  }
-  getSize() {              // Узнать размер гамбургера
-    let size = "";
-    const inputs = document.querySelectorAll(`.menu__input-size`);
-    this.initChangeEventRadio(inputs, size);
-  }
-  getStuffing() {          // Узнать начинку гамбургера
-    let stuffing = "";
-    const inputs = document.querySelectorAll(`.menu__input-stuffing`);
-    this.initChangeEventRadio(inputs, stuffing);
-  }
-  initChangeEventRadio(elements, string) {
-    elements = [].slice.call(elements);
-    elements.map(element => {
-      element.addEventListener('change', () => {
-        string = element.value;
-        this.calculatePrice(string);
-        return string;
-      });
-    });
-  }
-  initChangeEventCheckbox(elements, arr) {
-    elements = [].slice.call(elements);
-    elements.map(element => {
-      element.addEventListener('change', () => {
-        if (arr.find(el => el === element.value)) {
-          this.removeTopping(arr, element.value);
-        } else {
-          this.addTopping(arr, element.value);
-        }
-        return console.log(arr);
-      });
-    });
-  }
-  calculatePrice() {       // Узнать цену
-    let sum = 0,
-        arr = [];
+  getHamburgerStuffItem() {
     for(let i = 0; i < document.forms[0].elements.length; i++) {
       if(document.forms[0].elements[i].checked) {
-        arr.push(document.forms[0].elements[i].value);
+        this.hamburgerStuff.push(document.forms[0].elements[i].value);
       }
     }
-    console.log(this.getSize(), this.getStuffing());
   }
-  calculateCalories() {    // Узнать калорийность
-
+  calculatePrice() {
+    this.sum = 0;
+    this.getHamburgerStuffItem();
+    for(let i = 0; i < this.hamburgerStuff.length; i++) {
+      this.getStuff(this.hamburgerStuff[i]);
+    }
+    document.querySelector(".menu__price").innerHTML = `${this.sum} RUB`;
+  }
+  calculateCalories() {
+    this.calories = 0;
+    this.getHamburgerStuffItem();
+    for(let i = 0; i < this.hamburgerStuff.length; i++) {
+      this.getStuff(this.hamburgerStuff[i]);
+    }
+    document.querySelector(".menu__calories").innerHTML = `${this.calories} калорий`;
+  }
+  getStuff(string) {
+    switch(string) {
+      case "small":
+        this.sum += 50;
+        this.calories += 20;
+        break;
+      case "big":
+        this.sum += 100;
+        this.calories += 40;
+        break;
+      case "cheese":
+        this.sum += 10;
+        this.calories += 20;
+        break;
+      case "salad":
+        this.sum += 20;
+        this.calories += 5;
+        break;
+      case "potato":
+        this.sum += 15;
+        this.calories += 10;
+        break;
+      case "flavoring":
+        this.sum += 15;
+        this.calories += 0;
+        break;
+      case "mayonnaise":
+        this.sum += 20;
+        this.calories += 5;
+        break;
+      default:
+        return this.sum, this.calories;
+    }
+  }
+  init() {
+    this.initHamburgerEvent();
+    this.calculatePrice();
+    this.calculateCalories();
   }
 }
 
 let hamburger = new Hamburger;
-hamburger.calculatePrice();
+hamburger.init();
