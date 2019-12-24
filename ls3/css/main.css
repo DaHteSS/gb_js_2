@@ -119,3 +119,13 @@ body {
   right: 10px;
   cursor: pointer;
 }
+
+.btn_unactive {
+  cursor: default;
+  border: 2px solid #cecece;
+  color: #cecece;
+}
+.btn_unactive:hover {
+  color: #cecece;
+  background: transparent;
+}

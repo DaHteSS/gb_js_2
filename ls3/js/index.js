@@ -19,7 +19,7 @@ const makeGETRequest = (url) => {
                 }
             }
         }
-        xhr.onerror = function(err) {
+        xhr.onerror = function (err) {
             reject(err);
         }
 
@@ -84,26 +84,46 @@ class GoodsList {
 }
 
 // Класс для корзины
+class CartItem extends GoodsItem {
+    constructor(...props) {
+        super(...props);
+    }
+    render() {
+        return `<div class="cart__item">
+                    <h3 class="cart__item-title">${this.title}</h3>
+                    <p class="cart__item-price">${this.price}$</p>
+                    <div class="cart__cell">
+                    <button class="cart__dec">-</button>
+                    <input class="cart__input" type="text" value="1">
+                    <button class="cart__inc">+</button>
+                    </div>
+                    <button class="cart__item-remove" data-remove="${this.id_product}">Удалить</button>
+                </div>`;
+    }
+}
+
 class Cart extends GoodsList {
     constructor(props) {
         super(props);
         this.cartItems = [];
         this.container = null;
         this.cartBtn = document.querySelector(".cart__button");
+        this.render();
+        this.cartTotal();
     }
     initClickEvents() {
         const closeBtn = document.querySelector(".cart__close");
-        const cartCleanBtn = document.querySelector(".cart__close");
+        const cartCleanBtn = document.querySelector(".cart__clean");
         this.container = document.querySelector(".cart__container");
         this.cartBtn.addEventListener("click", () => {
             this.showCart();
         });
         closeBtn.addEventListener("click", () => {
             this.hideCart();
-        })
+        });
         cartCleanBtn.addEventListener("click", () => {
             this.clean()
-        })
+        });
     }
     showCart() {
         this.container.classList.remove("cart__container_hidden");
@@ -116,47 +136,113 @@ class Cart extends GoodsList {
         goodsBtns = [].slice.call(goodsBtns);
         goodsBtns.map(btn => {
             btn.addEventListener("click", () => {
-                if(this.checkCartItem(btn)) {
-                    console.log(this.cartItems)
+                if (this.checkCartItem(btn)) {
                     return;
                 } else {
                     this.cartItems.push(btn.getAttribute("data-id"));
-                    console.log(this.cartItems)
+                    // btn.classList.add("btn_unactive");
+                    // btn.innerHTML = "В корзине";
+                    this.render();
+                    this.cartTotal();
+                    this.deleteItem();
+                    this.incGood();
+                    this.decGood();
                 }
             })
         })
     }
     checkCartItem(btn) {
-        for(let i = 0; i < this.cartItems.length; i++) {
-            if(this.cartItems[i] === btn.getAttribute("data-id")) {
+        for (let i = 0; i < this.cartItems.length; i++) {
+            if (this.cartItems[i] === btn.getAttribute("data-id")) {
                 return true;
             }
         }
     }
+    deleteItem() {
+        let removeBtn = document.querySelectorAll(".cart__item-remove");
+        removeBtn = [].slice.call(removeBtn);
+        removeBtn.map(btn => {
+            btn.addEventListener("click", () => {
+                for(let i = 0; i < this.cartItems.length; i++) {
+                    if(btn.getAttribute("data-remove") === this.cartItems[i]) {
+                        this.cartItems.splice(this.cartItems.indexOf(this.cartItems[i]), 1);
+                        this.render();
+                        this.cartTotal();
+                        if(this.cartItems.length !== 0) {
+                            this.deleteItem();
+                        }
+                    }
+                }
+            })
+        })
+    }
+    cartTotal(input) {
+        let total = 0;
+        for (let i = 0; i < this.cartItems.length; i++) {
+            for (let j = 0; j < this.goods.length; j++) {
+                if (parseInt(this.cartItems[i]) === this.goods[j].id_product) {
+                    total += parseInt(input.value) * this.goods[j].price;
+                }
+            }
+        }
+        document.querySelector(".cart__total").innerHTML = total;
+    }
     clean() {
         this.cartItems = [];
-     }
-    incGood() { }
-    decGood() { }
-}
-
-class CartItem extends GoodsItem {
-    constructor(props) {
-        super(props);
+        this.render();
     }
-    delete() { }
     render() {
-        return `<div class="cart__item">
-                    <h3 class="cart__item-title">${this.title}</h3>
-                    <p class="cart__item-price">${this.price}$</p>
-                </div>`;
+        let listHtml = '';
+        for (let i = 0; i < this.cartItems.length; i++) {
+            for (let j = 0; j < this.goods.length; j++) {
+                if (parseInt(this.cartItems[i]) === this.goods[j].id_product) {
+                    const cartItem = new CartItem(this.goods[j].product_name, this.goods[j].price, this.goods[j].id_product);
+                    listHtml += cartItem.render();
+                }
+            }
+        }
+        if (listHtml === '') {
+            listHtml = '<span class="cart__title">Не добавлено ни одного товара</span>';
+        }
+        document.querySelector(".cart__items").innerHTML = listHtml;
+    }
+    incGood() {
+        let incBtns = document.querySelectorAll(".cart__inc");
+
+        incBtns = [].slice.call(incBtns);
+        incBtns.map(btn => {
+            let input = btn.previousElementSibling;
+            btn.addEventListener("click", () => {
+                input.value = parseInt(input.value) + 1;
+                this.cartTotal(input);
+            })
+        })
+    }
+    decGood() {
+        let decBtns = document.querySelectorAll(".cart__dec");
+
+        decBtns = [].slice.call(decBtns);
+        decBtns.map(btn => {
+            let input = btn.nextElementSibling;
+            btn.addEventListener("click", () => {
+                if (input.value <= 0) {
+                    input.value = 0;
+                    this.cartTotal(input)
+                } else {
+                    input.value = parseInt(input.value) - 1;
+                    this.cartTotal(input)
+                }
+            })
+        })
     }
 }
 
 const list = new GoodsList();
+const cart = new Cart();
 list.fetchGoods().then(() => {
     list.render();
+})
+cart.fetchGoods().then(() => {
     cart.addToCart();
+    cart.initClickEvents();
 });
-const cart = new Cart();
-cart.initClickEvents();
