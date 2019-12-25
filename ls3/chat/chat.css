@@ -141,6 +141,7 @@
 
 .chat__hidden .chat__header {
   cursor: pointer;
+  height: 49px;
 }
 .chat__hidden .chat__close {
   display: none;

@@ -89,16 +89,22 @@ class CartItem extends GoodsItem {
         super(...props);
     }
     render() {
-        return `<div class="cart__item">
-                    <h3 class="cart__item-title">${this.title}</h3>
-                    <p class="cart__item-price">${this.price}$</p>
-                    <div class="cart__cell">
-                    <button class="cart__dec">-</button>
-                    <input class="cart__input" type="text" value="1">
-                    <button class="cart__inc">+</button>
-                    </div>
-                    <button class="cart__item-remove" data-remove="${this.id_product}">Удалить</button>
-                </div>`;
+        return `<tr class="cart__item">
+                    <td>
+                        <h3 class="cart__item-title">${this.title}</h3>
+                    </td>
+                    <td>
+                        <p class="cart__item-price">${this.price}$</p>
+                    </td>
+                    <td class="cart__cell">
+                        <button class="cart__dec">-</button>
+                        <input class="cart__input" type="text" data-price="${this.price}" value="1">
+                        <button class="cart__inc">+</button>
+                    </td>
+                    <td>
+                        <button class="cart__item-remove" data-remove="${this.id_product}">Удалить</button>
+                    </td>
+                </tr>`;
     }
 }
 
@@ -109,7 +115,8 @@ class Cart extends GoodsList {
         this.container = null;
         this.cartBtn = document.querySelector(".cart__button");
         this.render();
-        this.cartTotal();
+        // this.cartTotal();
+        this.total = 0;
     }
     initClickEvents() {
         const closeBtn = document.querySelector(".cart__close");
@@ -143,7 +150,7 @@ class Cart extends GoodsList {
                     // btn.classList.add("btn_unactive");
                     // btn.innerHTML = "В корзине";
                     this.render();
-                    this.cartTotal();
+                    // this.cartTotal();
                     this.deleteItem();
                     this.incGood();
                     this.decGood();
@@ -167,7 +174,7 @@ class Cart extends GoodsList {
                     if(btn.getAttribute("data-remove") === this.cartItems[i]) {
                         this.cartItems.splice(this.cartItems.indexOf(this.cartItems[i]), 1);
                         this.render();
-                        this.cartTotal();
+                        // this.cartTotal();
                         if(this.cartItems.length !== 0) {
                             this.deleteItem();
                         }
@@ -176,20 +183,24 @@ class Cart extends GoodsList {
             })
         })
     }
-    cartTotal(input) {
-        let total = 0;
-        for (let i = 0; i < this.cartItems.length; i++) {
-            for (let j = 0; j < this.goods.length; j++) {
-                if (parseInt(this.cartItems[i]) === this.goods[j].id_product) {
-                    total += parseInt(input.value) * this.goods[j].price;
-                }
-            }
-        }
-        document.querySelector(".cart__total").innerHTML = total;
-    }
+    // cartTotal() {
+    //     let inputs = document.querySelectorAll(".cart__input");
+
+    //     inputs = [].slice.call(inputs);
+
+    //     if(inputs === []) {
+    //         this.total = 0;
+    //     } else {
+    //         inputs.map(input => {
+    //             this.total += input.getAttribute("data-price") * input.value;
+    //         })
+    //     }
+    //     document.querySelector(".cart__total").innerHTML = this.total;
+    // }
     clean() {
         this.cartItems = [];
         this.render();
+        // this.total = 0;
     }
     render() {
         let listHtml = '';
@@ -214,7 +225,7 @@ class Cart extends GoodsList {
             let input = btn.previousElementSibling;
             btn.addEventListener("click", () => {
                 input.value = parseInt(input.value) + 1;
-                this.cartTotal(input);
+                // this.cartTotal();
             })
         })
     }
@@ -227,10 +238,10 @@ class Cart extends GoodsList {
             btn.addEventListener("click", () => {
                 if (input.value <= 0) {
                     input.value = 0;
-                    this.cartTotal(input)
+                    // this.cartTotal()
                 } else {
                     input.value = parseInt(input.value) - 1;
-                    this.cartTotal(input)
+                    // this.cartTotal()
                 }
             })
         })
