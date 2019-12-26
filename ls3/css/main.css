@@ -129,9 +129,8 @@ body {
   color: #cecece;
   background: transparent;
 }
-
-.cart__item {
-  display: flex;
+.cart__input {
+  width: 25px;
 }
 .cart__clean {
   position: absolute;
@@ -150,5 +149,14 @@ body {
   color: #531253;
   transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
 }
-
-.cart__item-title
+.cart__item {
+  display: block;
+  margin-bottom: 30px;
+}
+.cart__item:last-child {
+  margin-bottom: 0;
+}
+.cart__item td {
+  width: 100px;
+}
+.cart__item-title {}

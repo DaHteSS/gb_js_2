@@ -50,11 +50,10 @@ class GoodsList {
         this.goods = [];
     }
     fetchGoods() {
-        return makeGETRequest(`${API_URL}/catalogData.json`)
-            .then((goods) => {
-                this.goods = goods;
-            })
-            .catch(err => console.log(err));
+        return fetch(`${API_URL}/catalogData.json`)
+            .then(response => response.json())
+            .then(goods => this.goods = goods)
+            .catch(e => e);
     }
     // Подсчёт суммы всех товаров
     totalPrice() {
@@ -170,12 +169,12 @@ class Cart extends GoodsList {
         removeBtn = [].slice.call(removeBtn);
         removeBtn.map(btn => {
             btn.addEventListener("click", () => {
-                for(let i = 0; i < this.cartItems.length; i++) {
-                    if(btn.getAttribute("data-remove") === this.cartItems[i]) {
+                for (let i = 0; i < this.cartItems.length; i++) {
+                    if (btn.getAttribute("data-remove") === this.cartItems[i]) {
                         this.cartItems.splice(this.cartItems.indexOf(this.cartItems[i]), 1);
                         this.render();
                         // this.cartTotal();
-                        if(this.cartItems.length !== 0) {
+                        if (this.cartItems.length !== 0) {
                             this.deleteItem();
                         }
                     }
